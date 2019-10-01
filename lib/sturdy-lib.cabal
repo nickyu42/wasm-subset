@@ -1,0 +1,199 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: c70416fb7fba72d1688f9b13e0c694c601501b13308f5a8bbc4c8e3baf11373b
+
+name:           sturdy-lib
+version:        0.2.0.0
+synopsis:       A library for sound static analyses
+category:       Language
+homepage:       https://github.com/svenkeidel/sturdy#readme
+bug-reports:    https://github.com/svenkeidel/sturdy/issues
+maintainer:     Sven Keidel <svenkeidel@gmail.com>
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/svenkeidel/sturdy
+
+library
+  exposed-modules:
+      Control.Arrow.Const
+      Control.Arrow.Environment
+      Control.Arrow.Except
+      Control.Arrow.Fail
+      Control.Arrow.Fix
+      Control.Arrow.Fix.Cache
+      Control.Arrow.Fix.Chaotic
+      Control.Arrow.Fix.Context
+      Control.Arrow.Fix.Reuse
+      Control.Arrow.Fix.Stack
+      Control.Arrow.Fix.Widening
+      Control.Arrow.Monad
+      Control.Arrow.Order
+      Control.Arrow.Random
+      Control.Arrow.Reader
+      Control.Arrow.State
+      Control.Arrow.Store
+      Control.Arrow.Trans
+      Control.Arrow.Transformer.Abstract.BoundedEnvironment
+      Control.Arrow.Transformer.Abstract.Completion
+      Control.Arrow.Transformer.Abstract.Environment
+      Control.Arrow.Transformer.Abstract.Error
+      Control.Arrow.Transformer.Abstract.Except
+      Control.Arrow.Transformer.Abstract.Failure
+      Control.Arrow.Transformer.Abstract.Fix
+      Control.Arrow.Transformer.Abstract.Fix.Cache
+      Control.Arrow.Transformer.Abstract.Fix.Cache.Basic
+      Control.Arrow.Transformer.Abstract.Fix.Cache.ContextSensitive
+      Control.Arrow.Transformer.Abstract.Fix.Cache.Group
+      Control.Arrow.Transformer.Abstract.Fix.Chaotic
+      Control.Arrow.Transformer.Abstract.Fix.Context
+      Control.Arrow.Transformer.Abstract.Fix.Parallel
+      Control.Arrow.Transformer.Abstract.Fix.Stack
+      Control.Arrow.Transformer.Abstract.Fix.Trace
+      Control.Arrow.Transformer.Abstract.Powerset
+      Control.Arrow.Transformer.Abstract.ReachingDefinitions
+      Control.Arrow.Transformer.Abstract.Store
+      Control.Arrow.Transformer.Abstract.Terminating
+      Control.Arrow.Transformer.Cokleisli
+      Control.Arrow.Transformer.Concrete.Environment
+      Control.Arrow.Transformer.Concrete.Except
+      Control.Arrow.Transformer.Concrete.Failure
+      Control.Arrow.Transformer.Concrete.Random
+      Control.Arrow.Transformer.Concrete.ReachingDefinitions
+      Control.Arrow.Transformer.Concrete.Store
+      Control.Arrow.Transformer.Const
+      Control.Arrow.Transformer.Cont
+      Control.Arrow.Transformer.FreeVars
+      Control.Arrow.Transformer.Kleisli
+      Control.Arrow.Transformer.ReachingDefinitions
+      Control.Arrow.Transformer.Reader
+      Control.Arrow.Transformer.State
+      Control.Arrow.Transformer.Static
+      Control.Arrow.Transformer.Value
+      Control.Arrow.Transformer.Writer
+      Control.Arrow.Utils
+      Control.Arrow.Writer
+      Data.Abstract.Boolean
+      Data.Abstract.CallString
+      Data.Abstract.Closure
+      Data.Abstract.Constructor
+      Data.Abstract.DiscretePowerset
+      Data.Abstract.Either
+      Data.Abstract.Equality
+      Data.Abstract.Error
+      Data.Abstract.Except
+      Data.Abstract.Failure
+      Data.Abstract.FreeCompletion
+      Data.Abstract.InfiniteNumbers
+      Data.Abstract.Interval
+      Data.Abstract.Map
+      Data.Abstract.Maybe
+      Data.Abstract.Narrowing
+      Data.Abstract.Ordering
+      Data.Abstract.Powerset
+      Data.Abstract.Sign
+      Data.Abstract.Singleton
+      Data.Abstract.Stable
+      Data.Abstract.StrongMap
+      Data.Abstract.Terminating
+      Data.Abstract.There
+      Data.Abstract.TreeGrammar
+      Data.Abstract.TreeGrammar.NonTerminal
+      Data.Abstract.TreeGrammar.Terminal
+      Data.Abstract.WeakMap
+      Data.Abstract.Widening
+      Data.Boolean
+      Data.Concrete.Boolean
+      Data.Concrete.Error
+      Data.Concrete.Powerset
+      Data.Empty
+      Data.GaloisConnection
+      Data.Identifiable
+      Data.Label
+      Data.Lens
+      Data.Metric
+      Data.Monoidal
+      Data.Numeric
+      Data.Order
+      Data.OrdMap
+      Data.Singleton
+      Data.Utils
+  other-modules:
+      Paths_sturdy_lib
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base
+    , comonad
+    , containers
+    , deepseq
+    , hashable
+    , mtl
+    , profunctors
+    , random
+    , text
+    , union-find
+    , unordered-containers
+  default-language: Haskell2010
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      ContextSensitivitySpec
+      FixpointSpec
+      MapSpec
+      TestPrograms
+      TreeGrammarSpec
+      Paths_sturdy_lib
+  hs-source-dirs:
+      test
+  build-depends:
+      QuickCheck
+    , base
+    , comonad
+    , containers
+    , deepseq
+    , hashable
+    , hspec
+    , mtl
+    , profunctors
+    , random
+    , sturdy-lib
+    , text
+    , union-find
+    , unordered-containers
+  default-language: Haskell2010
+
+benchmark arrow-transformers
+  type: exitcode-stdio-1.0
+  main-is: ArrowTransformerBench.hs
+  other-modules:
+      Paths_sturdy_lib
+  hs-source-dirs:
+      bench
+  ghc-options: -fplugin=DumpCore -fplugin-opt DumpCore:core-html -O2
+  build-depends:
+      base
+    , comonad
+    , containers
+    , criterion
+    , deepseq
+    , dump-core
+    , hashable
+    , mtl
+    , profunctors
+    , random
+    , sturdy-lib
+    , text
+    , union-find
+    , unordered-containers
+  default-language: Haskell2010

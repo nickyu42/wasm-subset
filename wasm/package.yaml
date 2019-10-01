@@ -1,0 +1,27 @@
+name:       wasm-subset
+version:    0.1.0.0
+synopsis:   A Sturdy style generic interpreter for a subset of WebAseembly
+maintainer: Nick Yu <nickyu42@gmail.com>
+license:    MIT
+github:     nickyu42/wasm-subset
+category:   Language
+
+dependencies:
+  - sturdy-lib
+  - base
+
+library:
+  ghc-options:
+    -Wall
+  source-dirs:
+    - src
+
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+      - test
+    dependencies:
+      - sturdy-lib
+      - hspec
+      - QuickCheck

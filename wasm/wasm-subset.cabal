@@ -1,0 +1,47 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 8585cc6fd6759c4358be55046ddc2d6b0e06733be49559d70a8f836afb20bd67
+
+name:           wasm-subset
+version:        0.1.0.0
+synopsis:       A Sturdy style generic interpreter for a subset of WebAseembly
+category:       Language
+homepage:       https://github.com/nickyu42/wasm-subset#readme
+bug-reports:    https://github.com/nickyu42/wasm-subset/issues
+maintainer:     Nick Yu <nickyu42@gmail.com>
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/nickyu42/wasm-subset
+
+library
+  other-modules:
+      Paths_wasm_subset
+  hs-source-dirs:
+      src
+  ghc-options: -Wall
+  build-depends:
+      base
+    , sturdy-lib
+  default-language: Haskell2010
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_wasm_subset
+  hs-source-dirs:
+      test
+  build-depends:
+      QuickCheck
+    , base
+    , hspec
+    , sturdy-lib
+  default-language: Haskell2010
