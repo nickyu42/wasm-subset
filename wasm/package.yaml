@@ -9,6 +9,7 @@ category:   Language
 dependencies:
   - sturdy-lib
   - base
+  - profunctors
 
 library:
   ghc-options:
