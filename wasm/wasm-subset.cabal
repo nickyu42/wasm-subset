@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3250f512d4ea82c1fd27b00a6267c2d5dbd05c820fb5c590ca65f00100a747be
+-- hash: a0e0e8fd49fabc7ab788809997c130713b3c895f5f03575258fdb1e9e174ee57
 
 name:           wasm-subset
 version:        0.1.0.0
@@ -23,9 +23,11 @@ source-repository head
 
 library
   exposed-modules:
+      ConcreteInterpreter
       Control.Arrow.Stack
-      Control.Arrow.Transformer.Concrete.Stack
       GenericInterpreter
+      Syntax
+      Transformer.Concrete.Stack
   other-modules:
       Paths_wasm_subset
   hs-source-dirs:

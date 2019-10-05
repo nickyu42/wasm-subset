@@ -5,10 +5,9 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE UndecidableInstances #-}
+module Transformer.Concrete.Stack where 
 
-module Control.Arrow.Transformer.Concrete.Stack where 
-
-import Prelude hiding ((.))
+import Prelude hiding ((.), fail)
 
 import Control.Category
 import Control.Arrow
@@ -22,30 +21,32 @@ import Control.Arrow.Trans
 import Control.Arrow.Transformer.State
 
 import Data.Profunctor
+import Data.String
+import Text.Printf
+
+import Syntax(WasmType)
 
 -- | Transformer that adds a stack to a computation
---   newtype StateT s c x y = StateT { runStateT :: c (s,x) (s,y) }
 newtype StackT val c x y = StackT (StateT ([val]) c x y)
     deriving (Profunctor, Category, Arrow, ArrowChoice, ArrowTrans, ArrowLift, ArrowRun,
               ArrowConst r, ArrowReader r, ArrowFail e, ArrowExcept e)
 
 
-instance (ArrowChoice c, Profunctor c, Eq val) => ArrowStack val (StackT val c) where
-    type instance Join y (StackT val c) = ()
+instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c, Show val) => ArrowStack val (StackT val c) where
 
-    -- f is success, g is failure
-    pop (StackT f) (StackT g) = StackT $ proc expect -> do
+    -- the concrete implementation of the stack
+    -- does not check if the correct value is on the stack
+    pop = StackT $ proc _ -> do
         s <- get -< ()
         case s of
-            v:_ -> if v == expect then f -< v else g -< expect
-            [] -> g -< expect
+            v:_ -> returnA -< v
+            [] -> fail -< fromString "Can't pop from empty stack"
 
     -- modify takes an arrow that modifies the state
     -- defined in Control.Arrow.State
-    push = StackT $ modify $ arr $ \(v, s) -> ((), v:s)
+    push = StackT . modify . arr $ \(v, s) -> ((), v:s)
 
-
--- | Add state in StackT 
+-- | StateT is already an instance of ArrowState, so lift the functions
 instance ArrowState s c => ArrowState s (StackT val c) where
   get = lift' get
   put = lift' put
