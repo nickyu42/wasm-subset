@@ -7,13 +7,9 @@ data WasmType
     | F64
     deriving (Show, Eq)
 
-data WasmVal
-    = I64Val Int64
-    | F64Val Double
-    deriving (Show, Eq)
-
 data Instr
-    = Const WasmVal
+    = ConstI64 Int64
+    | ConstF64 Double
     | Binary WasmType BinOpInstr
     | Unary WasmType UnOpInstr
     | Compare WasmType RelOpInstr

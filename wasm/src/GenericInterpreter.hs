@@ -29,9 +29,13 @@ class Arrow c => IsVal v c | c -> v where
     add :: c (v, v) v
     neg :: c v v
 
+class Arrow c => GetValue v c | c -> v where
+    getValue :: c WasmType v
+
 type CanInterp v e c = (
     ArrowStack v c,
     IsVal v c,
+    GetValue v c,
     IsString e,
     ArrowChoice c,
     ArrowFail e c,
@@ -41,39 +45,39 @@ step :: CanInterp v e c => c [AdminInstr v] [AdminInstr v]
 step = fix $ \step' -> proc instr -> case instr of
 
     (Plain instr':rest) -> case instr' of
-        Const wasmval -> case wasmval of
-            I64Val v -> do
-                val <- int64 -< v
-                push -< val
-                step' -< rest
-            F64Val v -> do
-                val <- float64 -< v
-                push -< val
-                step' -< rest
+        ConstI64 v -> do
+            val <- int64 -< v
+            push -< val
+            step' -< rest
+
+        ConstF64 v -> do
+            val <- float64 -< v
+            push -< val
+            step' -< rest
 
         Binary t op -> case op of
             Add -> do
-                val1 <- pop -< t
-                val2 <- pop -< t
+                val1 <- pop <<< getValue -< t
+                val2 <- pop <<< getValue -< t
                 push <<< add -< (val1, val2)
                 step' -< rest
         
         Unary t op -> case op of
             Neg -> do
-                val <- pop -< t
+                val <- pop <<< getValue -< t
                 push <<< neg -< val
                 step' -< rest
         
         Compare t op -> case op of
             Eq -> do
-                val1 <- pop -< t
-                val2 <- pop -< t
+                val1 <- pop <<< getValue -< t
+                val2 <- pop <<< getValue -< t
                 push <<< eq -< (val1, val2)
                 step' -< rest
 
             Lt -> do
-                val1 <- pop -< t
-                val2 <- pop -< t
+                val1 <- pop <<< getValue -< t
+                val2 <- pop <<< getValue -< t
                 push <<< lt -< (val1, val2)
                 step' -< rest
     

@@ -18,11 +18,12 @@ import Data.Profunctor
 class (Arrow c, Profunctor c) => ArrowStack v c | c -> v where
     -- type family Join y (c :: * -> * -> *) :: Constraint
 
-    -- | val in the second argument can be used as an 'expected' value for popping
-    -- pop :: Join y c => c val y -> c val y -> c val y 
+    -- val in the second argument can be used as an 'expected' value for popping
+    -- pop :: Join y c => c val y -> c val y -> c val y
 
+    -- the input argument for pop can be used as an 'expected' value
     pop :: c v v
-
+    peek :: c () v
     push :: c v ()
 
 -- pop' :: (Show val, Join val c, IsString e, ArrowFail e c, ArrowStack val c) => c val val
