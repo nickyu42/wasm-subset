@@ -15,6 +15,7 @@ import Control.Arrow.Stack
 import Control.Arrow.Const
 import Control.Arrow.Except
 import Control.Arrow.Fail
+import Control.Arrow.Fix
 import Control.Arrow.Reader
 import Control.Arrow.State
 import Control.Arrow.Trans
@@ -29,7 +30,7 @@ newtype StackT val c x y = StackT (StateT ([val]) c x y)
               ArrowConst r, ArrowReader r, ArrowFail e, ArrowExcept e)
 
 
-instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c, Show val) => ArrowStack val (StackT val c) where
+instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c) => ArrowStack val (StackT val c) where
 
     peek = StackT $ proc _ -> do
         s <- get -< ()
@@ -50,3 +51,6 @@ instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c, Show val) => A
 instance ArrowState s c => ArrowState s (StackT val c) where
   get = lift' get
   put = lift' put
+
+instance ArrowFix (Underlying (StackT val c) x y) => ArrowFix (StackT val c x y)
+type instance Fix (StackT val c) x y = StackT val (Fix c [val] [val]) 

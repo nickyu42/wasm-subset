@@ -22,7 +22,7 @@ import Syntax
 data Config v = Config { confCode :: Code v }
 
 class Arrow c => IsVal v c | c -> v where
-    int64 :: c Int64 v
+    int32 :: c Int32 v
     float64 :: c Double v
     eq :: c (v, v) v
     lt :: c (v, v) v
@@ -45,8 +45,8 @@ step :: CanInterp v e c => c [AdminInstr v] [AdminInstr v]
 step = fix $ \step' -> proc instr -> case instr of
 
     (Plain instr':rest) -> case instr' of
-        ConstI64 v -> do
-            val <- int64 -< v
+        ConstI32 v -> do
+            val <- int32 -< v
             push -< val
             step' -< rest
 
@@ -80,6 +80,8 @@ step = fix $ \step' -> proc instr -> case instr of
                 val2 <- pop <<< getValue -< t
                 push <<< lt -< (val1, val2)
                 step' -< rest
+    
+    [] -> returnA -< []
     
     _ -> fail -< fromString "Not Implemented"
         

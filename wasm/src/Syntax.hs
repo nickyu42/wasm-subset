@@ -3,12 +3,12 @@ module Syntax where
 import Data.Int
 
 data WasmType
-    = I64
+    = I32
     | F64
     deriving (Show, Eq)
 
 data Instr
-    = ConstI64 Int64
+    = ConstI32 Int32
     | ConstF64 Double
     | Binary WasmType BinOpInstr
     | Unary WasmType UnOpInstr
