@@ -24,5 +24,6 @@ tests:
       - test
     dependencies:
       - sturdy-lib
+      - wasm-subset
       - hspec
       - QuickCheck

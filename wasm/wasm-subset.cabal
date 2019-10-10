@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a0e0e8fd49fabc7ab788809997c130713b3c895f5f03575258fdb1e9e174ee57
+-- hash: 082199ff2862ab5f4cf87e79e3b284803b0cac4d28a58c84369d9ead1a9b07fd
 
 name:           wasm-subset
 version:        0.1.0.0
@@ -43,6 +43,7 @@ test-suite spec
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ConcreteSpec
       Paths_wasm_subset
   hs-source-dirs:
       test
@@ -52,4 +53,5 @@ test-suite spec
     , hspec
     , profunctors
     , sturdy-lib
+    , wasm-subset
   default-language: Haskell2010
