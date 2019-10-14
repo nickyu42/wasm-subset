@@ -34,12 +34,7 @@ data RelOpInstr
     deriving (Show, Eq)
 
 type Stack a = [a]
-    
--- data Code v = Code {
---     innerInstructions :: [AdminInstr v],
---     savedStack :: [v] 
--- } deriving (Show, Eq)
-  
+
 data AdminInstr v =
     Plain Instr
     | Trapping String

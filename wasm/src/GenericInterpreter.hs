@@ -16,6 +16,7 @@ import Control.Arrow.Fix
 
 import Data.String
 import Data.Int
+import Text.Printf
 
 import Syntax
 
@@ -123,6 +124,7 @@ step = fix $ \step' -> proc instr -> case instr of
             let finalInner = innerInstr'' ++ tailInner
             returnA -< [Label returnTypes labelInstr savedStack finalInner]
     
+    (Breaking n:_) -> fail -< fromString $ printf "Can't break %s levels up" (show n)
     
     [] -> returnA -< []
     
