@@ -6,7 +6,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RankNTypes #-}                 -- for newtype multiple args
 {-# LANGUAGE TypeFamilies #-}               -- for type family Run
-{-# LANGUAGE UndecidableInstances #-}       -- allow ArrowFail String instance in IsVal declaration
+{-# LANGUAGE UndecidableInstances #-}       -- allow ArrowFail String instance in UseVal declaration
 module ConcreteInterpreter where
 
 import Prelude hiding (fail)
@@ -49,11 +49,7 @@ instance ArrowRun c => ArrowRun (ConcreteT c) where
     -- | run applies run on the lower layer arrow
     run (ConcreteT c) = Trans.run c
 
-instance Arrow c => GetValue Val (ConcreteT c) where
-    -- | this function just returns an identenity value
-    getValue = arr $ \_ -> I32Val 0
-
-instance (ArrowChoice c, ArrowFail String c) => IsVal Val (ConcreteT c) where
+instance (ArrowChoice c, ArrowFail String c) => UseVal Val (ConcreteT c) where
     int32 = arr I32Val
     float64 = arr F64Val
     eq = proc v -> case v of
@@ -72,13 +68,11 @@ instance (ArrowChoice c, ArrowFail String c) => IsVal Val (ConcreteT c) where
         (F64Val v') -> returnA -< F64Val (-v')
         _ -> fail -< "Non-float value given for negation"
 
+type TransformerStack = ConcreteT (StackT Val (FailureT String (->))) [AdminInstr Val] ()
 
-run :: [AdminInstr Val] -> Error String ([Val], [AdminInstr Val])
+run :: [Instr] -> Error String [Val]
 run instr =
-    Trans.run
-        (Generic.step ::
-            ConcreteT
-                (StackT Val
-                    (FailureT String
-                        (->))) [AdminInstr Val] [AdminInstr Val])
-        ([], instr)
+    fst <$>
+        Trans.run
+            (Generic.run :: TransformerStack)
+            ([], (map Plain instr))

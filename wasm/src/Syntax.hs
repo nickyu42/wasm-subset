@@ -13,12 +13,12 @@ data Instr
     | Binary WasmType BinOpInstr
     | Unary WasmType UnOpInstr
     | Compare WasmType RelOpInstr
+    | Block [WasmType] [Instr]
+    | Loop [Instr]
+    | Br Int
     deriving (Show, Eq)
-    -- | Block [WasmType] [Instr]
-    -- | Br Integer
     -- | BrIf Integer
     -- | If [WasmType] [Instr] [Instr]
-    -- | Loop [WasmType] [Instr]
 
 data BinOpInstr
     = Add
@@ -35,15 +35,15 @@ data RelOpInstr
 
 type Stack a = [a]
     
-data Code v = Code (Stack v) [AdminInstr v] deriving (Show, Eq)
--- data ModInst = EmptyInst deriving (Show, Eq)
--- data Frame = Frame ModInst Locals deriving (Show, Eq)
+-- data Code v = Code {
+--     innerInstructions :: [AdminInstr v],
+--     savedStack :: [v] 
+-- } deriving (Show, Eq)
   
 data AdminInstr v =
     Plain Instr
     | Trapping String
     | Returning (Stack v)
-    | Breaking Integer (Stack v)
-    | Label Integer [Instr] (Code v)
-    | Frame (Code v)
+    | Breaking Int
+    | Label [WasmType] [Instr] [v] [AdminInstr v]
     deriving (Show, Eq)

@@ -30,7 +30,8 @@ newtype StackT val c x y = StackT (StateT ([val]) c x y)
               ArrowConst r, ArrowReader r, ArrowFail e, ArrowExcept e)
 
 
-instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c) => ArrowStack val (StackT val c) where
+instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c) 
+    => ArrowStack val (StackT val c) where
 
     peek = StackT $ proc _ -> do
         s <- get -< ()
@@ -46,6 +47,9 @@ instance (ArrowChoice c, Profunctor c, IsString e, ArrowFail e c) => ArrowStack 
             [] -> fail -< fromString "Can't pop from empty stack"
 
     push = StackT . modify . arr $ \(v, s) -> ((), v:s)
+
+    getStack = StackT get
+    putStack = StackT put
 
 -- | StateT is already an instance of ArrowState, so the functions are lifted
 instance ArrowState s c => ArrowState s (StackT val c) where
